@@ -237,7 +237,10 @@ void gen_method_decl(AST * p) {
     reset_temps();
     cur_method = p;
     p->end_label = make_label();
-    printf(".sub __%s\n", p->sym->name);
+    if(p->sym->namespace && p->sym->namespace != global_namespace)
+        printf(".sub %s__%s\n", p->sym->namespace->name, p->sym->name);
+    else
+        printf(".sub __%s\n", p->sym->name);
 #if 0
     check_id_redecl(global_symbol_table, p->sym->name);
 #endif
@@ -605,7 +608,14 @@ void gen_method_call(AST * p) {
      * if p is instance method, push implicit object reference onto
      * calling stack.
      */
-    printf("\tcall __%s\n", p->arg1->targ->name);
+    if(p->arg1->targ->namespace && p->arg1->targ->namespace != global_namespace) {
+        printf("\tcall %s__%s\n", p->arg1->targ->namespace->name,
+                    p->arg1->targ->name);
+    }
+    else {
+        printf("\tcall __%s\n", p->arg1->targ->name);
+    }
+
     if(p->arg1->targ->type == t_void) {
         if(p->targ != NULL) {
             /* If caller wants a return value, method can't be void. */

@@ -14,6 +14,7 @@
 #include "cola.h"
 #include "parser.h"
 
+Symbol          *main_method;
 Symbol          *global_namespace;
 SymbolTable     *global_symbol_table;
 Symbol          *current_namespace;
@@ -505,6 +506,7 @@ Symbol * store_symbol(SymbolTable * tab, Symbol * sym) {
 #endif
     sym->scope = scope;
     sym->next = tab->table[index];
+    sym->namespace = current_namespace;
     tab->table[index] = sym;
 #ifdef DEBUG
     fprintf(stderr, "storing[%s] scope %d\n", sym->name, scope);

@@ -1,6 +1,6 @@
 "Cola" - A compiler for the Parrot/Perl6 VM
 
-  V0.0.5.2
+  V0.0.6.0
 
   I've started this compiler (I call it Cola) to simultaneously
   teach myself how to write a compiler (ok I admit I squeaked
@@ -105,9 +105,32 @@ Supported Constructs
 
   Boolean: The boolean ! operator isn't yet supported.
  
-  Methods:  
-    Classic C style, recursion supported. Return types supported.
+  Objects and Methods:  
+    Classic C++/Java style, recursion supported. Return types supported.
     Will be adding variable argument support per the C# spec.
+
+    Member variables or "fields" aren't yet supported. You
+    can use const definitions, but member variables
+    are incomplete pending a little more work on Parrot.
+    Its possible to do them now with PerlHash or PerlArray,
+    but I'm working on something faster for strictly typed,
+    non-dynamic languages.
+
+    Currently instance methods are the same as class methods. So
+    you could do:
+
+        Console.WriteLine("");
+
+    or  Console c = new Console();
+        c.WriteLine("");
+
+    The compiler doesn't yet differentiate between static or class
+    methods and instance methods, and whether you are calling them
+    as such.
+
+    OOP is really just faked for now, enough for people to write
+    in a high level language for Parrot. As everything, it is a work
+    in progress. All objects are simply PerlString references for now.
 
   Current Builtin Subroutines
 
@@ -156,6 +179,11 @@ Using the Compiler
 
         assemble.pl a.pasm > a.pbc
         parrot a.pbc
+
+  Currently colac is a short Perl pre-processor that includes
+  class for any import statements (using System;)
+  If you have trouble with colac you can just use colacc which
+  is the raw compiler which ignores 'using' directives.
 
   Also, if you look in "a.imc" you will see an intermediate
   language, delimited by tags (<program>....</program>) with some

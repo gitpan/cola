@@ -15,8 +15,9 @@ LIBS =
 HEADERS = cola.h parser.h
 
 default :
+	chmod 775 colac
 	$(MAKE) x
-	cp x colac
+	cp x colacc
 
 nogen : gen.o semant.o sym.o type.o
 	$(CC) $(DEBUG) -c parser.c
